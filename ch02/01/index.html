@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script>
+
+        $().ready(function () {
+            var usuario = prompt('Informe seu nome de usuario: ');
+
+            var connection = $.connection('/ExemploPC');
+            connection.received(function (data) {
+                $("#mensagens").append("<li>" + data + "</li>");
+            });
+            
+            connection.start()
+                      .done(function () {
+                          $("#enviar").click(function () {
+
+                              var mensagem = $("#mensagem");
+                              connection.send(usuario + ': ' + mensagem.val());
+                              mensagem.val('');
+                              mensagem.focus();
+
+                          });
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+    <label for="mensagem">Mensagem:</label>
+    <input type="text" id="mensagem" />
+    <button id="enviar">Enviar</button>
+
+    <ul id="mensagens">
+    </ul>
+
+</body>
+</html>
